@@ -11,6 +11,7 @@ class Message(object):
     def __init__(self, formatter, message):
         self._formatter = formatter
         self._message = message
+        self._formatter.add_message(self)
 
     ##############
     # Properties #
@@ -48,6 +49,22 @@ class Message(object):
                 return self._message["bot_id"]
             else:
                 return None
+
+    @property
+    def ts(self):
+        return self._message["ts"]
+
+    @property
+    def thread_ts(self):
+        return self._message.get("thread_ts")
+
+    @property
+    def is_thread(self):
+        return self.thread_ts and not self._message.get("replies")
+
+    @property
+    def hidden(self):
+        return self._message.get("hidden")
 
     @property
     def time(self):
@@ -110,7 +127,19 @@ class Message(object):
 
     @property
     def subtype(self):
-        return self._message.get("subtype")
+        return self._message.get("subtype") \
+            or ("thread_reply" if self.is_thread else None)
+
+    @property
+    def replies(self):
+        return self._message.get("replies", [])
+
+    @property
+    def reply_messages(self):
+        return [
+            self._formatter.find_message(reply.get("ts"))
+            for reply in self.replies
+        ]
 
 
 class LinkAttachment(object):

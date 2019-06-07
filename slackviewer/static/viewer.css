@@ -136,6 +136,12 @@ body {
     max-width: 10px;
 }
 
+.message_deleted,
+.message_changed,
+.thread_reply_hidden {
+    display: none;
+}
+
 .channel_join .msg, .channel_topic .msg,
 .bot_add .msg, .app_conversation_join .msg {
     font-style: italic;

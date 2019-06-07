@@ -18,6 +18,13 @@ class SlackFormatter(object):
     def __init__(self, USER_DATA, CHANNEL_DATA):
         self.__USER_DATA = USER_DATA
         self.__CHANNEL_DATA = CHANNEL_DATA
+        self.__MESSAGES = {}
+
+    def add_message(self, message):
+        self.__MESSAGES[message.ts] = message
+
+    def find_message(self, ts):
+        return self.__MESSAGES.get(ts)
 
     def find_user(self, message):
         if message.get("user") == "USLACKBOT":
